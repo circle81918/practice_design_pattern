@@ -1,6 +1,4 @@
 #include <iostream>
-#include <map>
-
 using namespace std;
 
 // Interface of animal
@@ -11,14 +9,14 @@ public:
   virtual void free() = 0;
 };
 
-class Cat : IAnimal {
+class Cat : public IAnimal {
 public:
   int getNumberOfLegs() const { return 4; }
   void speak() { cout<<"Meow"<<endl; }
   void free() { delete this; };
 };
 
-class Dog : IAnimal {
+class Dog : public IAnimal {
 public:
   int getNumberOfLegs() const { return 4; }
   void speak() { cout<<"Woof"<<endl; }
@@ -54,6 +52,5 @@ int main()
     pAnimal->speak();
     pAnimal->free();
   }
-
   return 0;
 }
