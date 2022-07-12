@@ -1,73 +1,65 @@
 #include <iostream>
-
 using namespace std;
 
+// Interface of animal
 class IAnimal {
 public:
   virtual int getNumberOfLegs() const = 0;
   virtual void speak() = 0;
-  virtual void free() = 0;
 };
 
 class Cat : public IAnimal {
 public:
-  int getNumberOfLegs() const override { return 4; }
-  void speak() override { cout << "Meow" << endl; }
-  void free() override { delete this; };
+  int getNumberOfLegs() const { return 4; }
+  void speak() { cout << "Meow" << endl; }
 };
 
 class Dog : public IAnimal {
 public:
-  int getNumberOfLegs() const override { return 4; }
-  void speak() override { cout << "Woof" << endl; }
-  void free() override { delete this; }
+  int getNumberOfLegs() const { return 4; }
+  void speak() { cout << "Woof" << endl; }
 };
 
-class IGender {
+class ISchool {
 public:
-  virtual void genderDescription() = 0;
+  virtual void teach() = 0;
 };
 
-class Boy : public IGender {
+class CatTrainer : public ISchool {
 public:
-  void genderDescription() { cout << "The gender is a boy" << endl; }
+  void teach() { cout << "I can train cat!" << endl; }
 };
 
-class Girl : public IGender {
+class DogTrainer : public ISchool {
 public:
-  void genderDescription() { cout << "The gender is a Girl" << endl; }
+  void teach() { cout << "I can train dog!" << endl; }
 };
 
-class IAnimalFactory {
+class IFactory {
 public:
-  virtual IAnimal* createAnimal(int gender) = 0;
-  virtual IGender* getGender(int type) = 0;
+  virtual IAnimal* make() = 0;
+  virtual ISchool* getTeacher() = 0;
 };
 
-class DogFactory : public IAnimalFactory {
+class DogFactory : public IFactory {
 public:
-  IGender* getGender(int type) {
-    if (!gender) {
-      if(type)
-        return new Girl();
-      else
-        return new Boy();
-    }
-    return gender;
-  }
-  IAnimal* createAnimal(int type) { 
-    cout<< "The animal is a dog" << endl;
-    auto gender = getGender(type);
-    gender->genderDescription();
-    return new Dog(); 
-  }
-
-  IGender *gender = nullptr;
+  IAnimal* make() { return new Dog(); }
+  ISchool* getTeacher() { return new DogTrainer(); };
 };
 
-int main() {
-  IAnimalFactory* dogfactory = new DogFactory();
-  IAnimal* dog1 = dogfactory->createAnimal(0);
-  IAnimal* dog2 = dogfactory->createAnimal(1);
+class CatFactory : public IFactory {
+public:
+  IAnimal* make() { return new Cat(); }
+  ISchool* getTeacher() { return new CatTrainer(); };
+};
 
+
+int main()
+{
+  IFactory* pDogFactory = new DogFactory();
+  IAnimal* pDog = pDogFactory->make();
+  ISchool* pTrainer = pDogFactory->getTeacher();
+  pDog->speak();
+  pTrainer->teach();
+  return 0;
 }
